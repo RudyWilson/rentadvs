@@ -1,7 +1,10 @@
 package com.akvasov.rentadvs;
 
+import com.akvasov.rentadvs.backend.controller.PageControllerHttpImpl;
 import com.akvasov.rentadvs.db.DAO.MongoImpl.FriendsDAOMongoImpl;
+import com.akvasov.rentadvs.model.User;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -40,9 +43,9 @@ public class Main {
         Core core = new Core(new PageControllerTestStaticImpl(), friendsDAOMongo, advDAOMongo);
         core.start();*/
 
-        /*PageControllerHttpImpl pageControllerHttp = new PageControllerHttpImpl();
-        List<User> yana_is = pageControllerHttp.getFriendsIds("47735");
-        System.out.println("yana_is = " + yana_is);*/
+        PageControllerHttpImpl pageControllerHttp = new PageControllerHttpImpl();
+        List<User> yana_is = pageControllerHttp.getFriends("47735");
+        System.out.println("yana_is = " + yana_is);
 
     }
 }

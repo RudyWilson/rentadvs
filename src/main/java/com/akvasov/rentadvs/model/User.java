@@ -106,11 +106,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                ", id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", userType=" + userType +
-                "friendsIds=" + friendsIds +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("User{")
+                .append("id=").append(id).append(", ")
+                .append("name=").append(name).append(", ")
+                .append("userType=").append(userType).append(", ")
+                .append("friendsIds=").append(friendsIds).append(", ")
+                .append("}");
+        return sb.toString();
     }
 }

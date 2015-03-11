@@ -13,7 +13,7 @@ public class HttpDao {
 
         ContentResponse response = request
                 .header("Referer", "http://vk.com/" + id)
-
+                //act=load_friends_silent&al=1&gid=0&id=47735
                 .param("act", "load_friends_silent")
                 .param("al", "1")
                 .param("gid", "0")
