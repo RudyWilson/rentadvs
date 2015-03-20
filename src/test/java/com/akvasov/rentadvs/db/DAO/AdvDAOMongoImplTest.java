@@ -2,14 +2,14 @@ package com.akvasov.rentadvs.db.DAO;
 
 import com.akvasov.rentadvs.db.DAO.MongoImpl.AdvDAOMongoImpl;
 import com.akvasov.rentadvs.model.Advertsment;
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
 
 import java.net.UnknownHostException;
 import java.util.*;
-
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by akvasov on 13.08.14.
@@ -22,7 +22,7 @@ public class AdvDAOMongoImplTest {
         adDAO = new AdvDAOMongoImpl();
     }
 
-    @Before
+    @BeforeMethod
     public void setUp() throws Exception {
         adDAO.clear();
     }
@@ -48,7 +48,7 @@ public class AdvDAOMongoImplTest {
 
         Object[] ex = lst.toArray();
         Object[] ac = adDAO.loadAllAdv().toArray();
-        assertArrayEquals(ex, ac);
+        assertEquals(ex, ac);
     }
 
     @Test
@@ -96,6 +96,6 @@ public class AdvDAOMongoImplTest {
 
         Object[] ex = exp.toArray();
         Object[] ac = adDAO.loadAllAdv().toArray();
-        assertArrayEquals(ex, ac);
+        assertEquals(ex, ac);
     }
 }

@@ -4,8 +4,10 @@ import com.akvasov.rentadvs.backend.command.Command;
 import com.akvasov.rentadvs.backend.command.GetAdvCommand;
 import com.akvasov.rentadvs.backend.command.GetFriendsCommand;
 import com.akvasov.rentadvs.backend.controller.PageController;
+import com.akvasov.rentadvs.config.ServerConfig;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
+import org.aeonbits.owner.ConfigFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -36,6 +38,7 @@ public class Worker implements Callable<Worker.WorkerResult> {
     }
 
     private static final Logger LOGGER = Logger.getLogger(Worker.class.getName());
+    private static final ServerConfig config =  ConfigFactory.create(ServerConfig.class);
     private Queue<Command> scheduler = new ConcurrentLinkedQueue<>();
 
     private Set<User> userSet = new HashSet();
@@ -118,7 +121,7 @@ public class Worker implements Callable<Worker.WorkerResult> {
             Future<Boolean> result;
             try {
                 do{
-                    result = executorService.schedule(task, 1, TimeUnit.SECONDS);
+                    result = executorService.schedule(task, config.schedulerPeriod(), TimeUnit.MILLISECONDS);
                     attempts++;
                 } while (result.get() == false && attempts < 5);
             } catch (InterruptedException e) {

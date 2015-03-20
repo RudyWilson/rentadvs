@@ -1,4 +1,4 @@
-package com.akvasov.rentadvs;
+package com.akvasov.rentadvs.main;
 
 import com.akvasov.rentadvs.backend.controller.PageControllerHttpImpl;
 import com.akvasov.rentadvs.backend.core.Core;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class Main {
 
-    public static final Logger logger = Logger.getLogger(TestMainStatic.class.getName());
+    public static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws Exception {
         LogManager.getLogManager().readConfiguration(Main.class.getResourceAsStream("/config/logging.properties"));

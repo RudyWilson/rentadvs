@@ -29,4 +29,13 @@ public interface ServerConfig extends Config {
     @DefaultValue("ellebliss")
     String databaseName();
 
+    //Scheduler properties
+    @Key("scheduler.period")
+    @DefaultValue("100")
+    Long schedulerPeriod();
+
+    @Key("scheduler.sleepAfterWork")
+    @DefaultValue("5000")
+    Long schedulerSleepAfterWork();
+
 }

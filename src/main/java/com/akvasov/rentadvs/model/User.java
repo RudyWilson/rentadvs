@@ -88,7 +88,7 @@ public class User {
 
         User user = (User) o;
 
-        if (userType != user.userType) return false;
+        //if (userType != user.userType) return false;
         if (!id.equals(user.id)) return false;
         if (!name.equals(user.name)) return false;
 

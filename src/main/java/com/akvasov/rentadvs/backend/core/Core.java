@@ -1,10 +1,12 @@
 package com.akvasov.rentadvs.backend.core;
 
 import com.akvasov.rentadvs.backend.controller.PageController;
+import com.akvasov.rentadvs.config.ServerConfig;
 import com.akvasov.rentadvs.db.DAO.AdvDAO;
 import com.akvasov.rentadvs.db.DAO.FriendsDAO;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
+import org.aeonbits.owner.ConfigFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
 public class Core implements Runnable {
 
     private static final Logger LOGGER = Logger.getLogger(Core.class.getName());
+    private static final ServerConfig config =  ConfigFactory.create(ServerConfig.class);
 
     private List<User> users = new ArrayList<>();
     private List<Advertsment> advs = new ArrayList<>();
@@ -124,11 +127,11 @@ public class Core implements Runnable {
                 result.get();
 
                 System.out.println("Session succesfully");
-                LOGGER.log(Level.FINE, "Sleep 1000");
+                LOGGER.fine("Sleep 1000");
 
                 postProcessing(result.get().getUsers(), result.get().getAdvs());
 
-                thread.sleep(5000);
+                thread.sleep(config.schedulerSleepAfterWork());
 
                 isWork = false;
             } catch (InterruptedException e) {
@@ -142,4 +145,23 @@ public class Core implements Runnable {
         LOGGER.fine("Core stop");
     }
 
+    public void waitUntilRunning() throws InterruptedException {
+        thread.join();
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Advertsment> getAdvs() {
+        return advs;
+    }
+
+    public void setAdvs(List<Advertsment> advs) {
+        this.advs = advs;
+    }
 }

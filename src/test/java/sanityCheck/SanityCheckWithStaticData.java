@@ -1,29 +1,34 @@
-package com.akvasov.rentadvs;
+package sanityCheck;
 
-import com.akvasov.rentadvs.backend.controller.PageControllerHttpImpl;
 import com.akvasov.rentadvs.backend.controller.PageControllerTestStaticImpl;
 import com.akvasov.rentadvs.backend.core.Core;
 import com.akvasov.rentadvs.db.DAO.MongoImpl.AdvDAOMongoImpl;
 import com.akvasov.rentadvs.db.DAO.MongoImpl.FriendsDAOMongoImpl;
+import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
-/**
- * Created by alex on 21.06.14.
- */
-public class TestMainStatic {
+import static org.testng.Assert.*;
 
-    public static final Logger logger = Logger.getLogger(TestMainStatic.class.getName());
+public class SanityCheckWithStaticData {
 
-    public static void main(String[] args) throws Exception {
-        LogManager.getLogManager().readConfiguration(TestMainStatic.class.getResourceAsStream("/config/logging.properties"));
-        logger.log(Level.FINE, "Start apps");
+    @BeforeMethod
+    public void setUp() throws Exception {
 
+    }
+
+    @AfterMethod
+    public void tearDown() throws Exception {
+
+    }
+
+    @Test
+    public void testMain() throws Exception {
         List<User> result = new ArrayList();
         User initialUser = new User();
         initialUser.setId("0");
@@ -39,6 +44,12 @@ public class TestMainStatic {
 
         Core core = new Core(new PageControllerTestStaticImpl(), friendsDAOMongo, advDAOMongo);
         core.start();
+        core.waitUntilRunning();
 
+        List<User> users = core.getUsers();
+        List<Advertsment> advs = core.getAdvs();
+
+        assertEquals(users.size(), 62);
+        assertEquals(advs.size(), 26);
     }
 }

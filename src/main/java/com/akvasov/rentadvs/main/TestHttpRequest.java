@@ -1,4 +1,4 @@
-package com.akvasov.rentadvs;
+package com.akvasov.rentadvs.main;
 
 import com.akvasov.rentadvs.backend.controller.PageControllerHttpImpl;
 import com.akvasov.rentadvs.model.User;
@@ -13,10 +13,10 @@ import java.util.logging.Logger;
  */
 public class TestHttpRequest {
 
-    public static final Logger logger = Logger.getLogger(TestMainStatic.class.getName());
+    public static final Logger logger = Logger.getLogger(TestHttpRequest.class.getName());
 
     public static void main(String[] args) throws Exception {
-        LogManager.getLogManager().readConfiguration(TestMainStatic.class.getResourceAsStream("/config/logging.properties"));
+        LogManager.getLogManager().readConfiguration(TestHttpRequest.class.getResourceAsStream("/config/logging.properties"));
         logger.log(Level.FINE, "Start apps");
 
         PageControllerHttpImpl pageControllerHttp = new PageControllerHttpImpl();
