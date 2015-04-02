@@ -33,7 +33,7 @@ public class PageParser {
                 }
 
                 User user = new User();
-                user.setId(usrPrmtrs[0]);
+                user.setId(usrPrmtrs[0].toString());
                 user.setName(usrPrmtrs[5]);
 
                 answer.add(user);

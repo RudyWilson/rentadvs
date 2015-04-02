@@ -3,6 +3,7 @@ package com.akvasov.rentadvs.backend.controller;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
@@ -20,7 +21,8 @@ public class PageControllerTestStaticImpl implements PageController{
     private List<List<Integer>> frnds = new ArrayList<>();
     private Integer cnt;
 
-    public PageControllerTestStaticImpl() {
+    @PostConstruct
+    private void init() {
         System.out.println("Load static data for PageControllerTestStaticImpl");
         File file;
         Scanner scanner = null;

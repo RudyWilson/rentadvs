@@ -31,7 +31,7 @@ public class GetAdvCommand implements Command {
         List<Advertsment> advertsments = null;
 
         try {
-            advertsments = pageController.getAdvertsments(user.getId());
+            advertsments = pageController.getAdvertsments(user.getId().toString());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

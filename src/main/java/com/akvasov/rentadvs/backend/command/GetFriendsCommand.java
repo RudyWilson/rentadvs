@@ -30,7 +30,7 @@ public class GetFriendsCommand implements Command {
         LOGGER.fine("GetFriendsCommand call");
         List<User> friends = null;
         try {
-            friends = pageController.getFriends(user.getId());
+            friends = pageController.getFriends(user.getId().toString());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

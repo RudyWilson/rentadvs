@@ -25,14 +25,14 @@ public class Main {
 
         FriendsDAOMongoImpl friendsDAOMongo = new FriendsDAOMongoImpl();
         List<User> initiateUsers = new ArrayList();
-        initiateUsers.add(new User("47735" ,"Яна"));
+        initiateUsers.add(new User("47735","Яна"));
         friendsDAOMongo.clear();
         friendsDAOMongo.addUsers(initiateUsers);
 
         AdvDAOMongoImpl advDAOMongo = new AdvDAOMongoImpl();
         advDAOMongo.clear();
 
-        Core core = new Core(new PageControllerHttpImpl(), friendsDAOMongo, advDAOMongo);
+        Core core = new Core();
         core.start();
     }
 

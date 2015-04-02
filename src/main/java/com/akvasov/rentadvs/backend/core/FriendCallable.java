@@ -21,7 +21,7 @@ public class FriendCallable implements Callable<List<User>> {
 
     @Override
     public List<User> call() throws Exception {
-        List<User> friends = pageController.getFriends(user.getId());
+        List<User> friends = pageController.getFriends(user.getId().toString());
         return friends;
     }
 }

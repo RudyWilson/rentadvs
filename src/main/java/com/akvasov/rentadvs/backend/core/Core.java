@@ -7,7 +7,9 @@ import com.akvasov.rentadvs.db.DAO.FriendsDAO;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
 import org.aeonbits.owner.ConfigFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,10 +23,10 @@ import java.util.logging.Logger;
 /**
  * Created by akvasov on 17.07.14.
  */
-public class Core implements Runnable {
+public class Core {
 
     private static final Logger LOGGER = Logger.getLogger(Core.class.getName());
-    private static final ServerConfig config =  ConfigFactory.create(ServerConfig.class);
+    private static final ServerConfig config = ConfigFactory.create(ServerConfig.class);
 
     private List<User> users = new ArrayList<>();
     private List<Advertsment> advs = new ArrayList<>();
@@ -32,32 +34,57 @@ public class Core implements Runnable {
 
     private Boolean isWork = false;
 
-    private PageController pageController;
+    @Autowired
     private FriendsDAO friendsDAO;
+    @Autowired
     private AdvDAO advDAO;
+    @Autowired
+    private PageController pageController;
 
-    private final Thread thread = new Thread(this);
+    private final Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            LOGGER.log(Level.FINE, "Start core Thread");
+            singleThreadExecutor = Executors.newSingleThreadExecutor();
+
+            while (isWork) {
+                LOGGER.fine("Try to create new Session");
+                Worker worker = createNewSession();
+                try {
+
+                    Future<Worker.WorkerResult> result = singleThreadExecutor.submit(worker);
+                    result.get();
+
+                    System.out.println("Session succesfully");
+                    LOGGER.fine("Sleep 1000");
+
+                    postProcessing(result.get().getUsers(), result.get().getAdvs());
+
+                    thread.sleep(config.schedulerSleepAfterWork());
+
+                    isWork = false;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            singleThreadExecutor.shutdown();
+            LOGGER.fine("Core stop");
+        }
+    });
 
     public void stop() {
         isWork = false;
     }
 
-    private Core(){
-    }
-
-    public Core(PageController pageController, FriendsDAO friendsDAO, AdvDAO advDAO) {
-        this.pageController = pageController;
-        this.friendsDAO = friendsDAO;
-        this.advDAO = advDAO;
-
-        init();
-    }
-
-    private void init(){
+    @PostConstruct
+    private void init() {
         users = friendsDAO.loadAllUsers();
     }
 
-    public synchronized Boolean start(){
+    public synchronized Boolean start() {
         if (isWork) return false;
         isWork = true;
 
@@ -65,7 +92,7 @@ public class Core implements Runnable {
         return true;
     }
 
-    private Worker createNewSession(){
+    private Worker createNewSession() {
         Worker worker = new Worker();
         worker.setPageController(pageController);
         worker.addUsers(users);
@@ -73,18 +100,18 @@ public class Core implements Runnable {
         return worker;
     }
 
-    private void postProcessing(Collection<User> users, Collection<Advertsment> advs){
+    private void postProcessing(Collection<User> users, Collection<Advertsment> advs) {
         List<User> deleteUsers = new ArrayList<>();
         List<User> newUsers = new ArrayList<>();
         //Logging changes users
-        for (User u: this.users){
-            if (!users.contains(u)){
+        for (User u : this.users) {
+            if (!users.contains(u)) {
                 LOGGER.info("Delete user: " + u);
                 deleteUsers.add(u);
             }
         }
-        for (User u: users){
-            if (!this.users.contains(u)){
+        for (User u : users) {
+            if (!this.users.contains(u)) {
                 LOGGER.info("Add user: " + u);
                 newUsers.add(u);
             }
@@ -96,8 +123,8 @@ public class Core implements Runnable {
         //Logging changes advs
         List<Advertsment> newAdvs = new ArrayList<>();
 
-        for (Advertsment a: advs){
-            if (!this.advs.contains(a)){
+        for (Advertsment a : advs) {
+            if (!this.advs.contains(a)) {
                 LOGGER.info("Add adv: " + a);
                 newAdvs.add(a);
                 this.advs.add(a);
@@ -111,38 +138,6 @@ public class Core implements Runnable {
         friendsDAO.addUsers(newUsers);
 
         advDAO.addAdvs(newAdvs);
-    }
-
-    @Override
-    public void run() {
-        LOGGER.log(Level.FINE, "Start core Thread");
-        singleThreadExecutor = Executors.newSingleThreadExecutor();
-
-        while (isWork){
-            LOGGER.fine("Try to create new Session");
-            Worker worker = createNewSession();
-            try {
-
-                Future<Worker.WorkerResult> result = singleThreadExecutor.submit(worker);
-                result.get();
-
-                System.out.println("Session succesfully");
-                LOGGER.fine("Sleep 1000");
-
-                postProcessing(result.get().getUsers(), result.get().getAdvs());
-
-                thread.sleep(config.schedulerSleepAfterWork());
-
-                isWork = false;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-
-        singleThreadExecutor.shutdown();
-        LOGGER.fine("Core stop");
     }
 
     public void waitUntilRunning() throws InterruptedException {
