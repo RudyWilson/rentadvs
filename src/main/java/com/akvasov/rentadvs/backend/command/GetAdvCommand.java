@@ -4,6 +4,9 @@ import com.akvasov.rentadvs.backend.core.Worker;
 import com.akvasov.rentadvs.backend.controller.PageController;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -11,16 +14,19 @@ import java.util.logging.Logger;
 /**
  * Created by alex on 17.07.14.
  */
+@Component
+@Scope(value = "prototype")
 public class GetAdvCommand implements Command {
 
     private static Logger LOGGER = Logger.getLogger(GetAdvCommand.class.getName());
 
-    private final PageController pageController;
+    @Autowired
+    private PageController pageController;
+
     private final User user;
     private final Worker worker;
 
-    public GetAdvCommand(Worker worker, PageController pageController, User user) {
-        this.pageController = pageController;
+    public GetAdvCommand(Worker worker, User user) {
         this.user = user;
         this.worker = worker;
     }

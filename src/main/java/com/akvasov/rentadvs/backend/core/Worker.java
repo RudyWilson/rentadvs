@@ -3,11 +3,14 @@ package com.akvasov.rentadvs.backend.core;
 import com.akvasov.rentadvs.backend.command.Command;
 import com.akvasov.rentadvs.backend.command.GetAdvCommand;
 import com.akvasov.rentadvs.backend.command.GetFriendsCommand;
-import com.akvasov.rentadvs.backend.controller.PageController;
 import com.akvasov.rentadvs.config.ServerConfig;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
 import org.aeonbits.owner.ConfigFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -16,7 +19,14 @@ import java.util.logging.Logger;
 /**
  * Created by akvasov on 17.07.14.
  */
+@Component
+@Scope(value = "prototype")
 public class Worker implements Callable<Worker.WorkerResult> {
+
+    @Autowired
+    private ApplicationContext ctx;
+    @Autowired
+    private TextAnalizator textAnalizator;
 
     public class WorkerResult {
 
@@ -44,16 +54,6 @@ public class Worker implements Callable<Worker.WorkerResult> {
     private Set<User> userSet = new HashSet();
     private Set<Advertsment> advertsmentSet = new HashSet();
 
-    private PageController pageController;
-
-    public PageController getPageController() {
-        return pageController;
-    }
-
-    public void setPageController(PageController pageController) {
-        this.pageController = pageController;
-    }
-
     public synchronized void setFriends(User user, List<User> friends) {
         List<Integer> ids = new ArrayList<>();
         for (User u: friends){
@@ -69,13 +69,13 @@ public class Worker implements Callable<Worker.WorkerResult> {
                 LOGGER.fine("Worker: Add user with id = " + u.getId());
                 userSet.add(u);
 
-                addTask(new GetFriendsCommand(this, getPageController(), u));
-                addTask(new GetAdvCommand(this, getPageController(), u));
+                addTask(ctx.getBean(GetFriendsCommand.class, this, u));
+                addTask(ctx.getBean(GetAdvCommand.class, this, u));
             }
         }
     }
 
-    private static boolean isValidAdv(Advertsment adv){
+    private boolean isValidAdv(Advertsment adv){
         LOGGER.fine("Analize adv: " + adv);
         Date date = new Date();
         Calendar c_now = Calendar.getInstance();
@@ -86,7 +86,7 @@ public class Worker implements Callable<Worker.WorkerResult> {
 
         c.add(Calendar.DAY_OF_MONTH, 7);
         boolean after = c.after(c_now);
-        boolean textValid = TextAnalizator.getInstance().isValid(adv.getText());
+        boolean textValid = textAnalizator.isValid(adv.getText());
 
         LOGGER.info("Adv: " + adv + " is " + after + " " + textValid);
         return after && textValid;

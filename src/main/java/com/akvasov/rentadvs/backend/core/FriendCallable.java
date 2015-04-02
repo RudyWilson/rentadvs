@@ -2,6 +2,7 @@ package com.akvasov.rentadvs.backend.core;
 
 import com.akvasov.rentadvs.backend.controller.PageController;
 import com.akvasov.rentadvs.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -11,11 +12,11 @@ import java.util.concurrent.Callable;
  */
 public class FriendCallable implements Callable<List<User>> {
 
-    private final PageController pageController;
+    @Autowired
+    private PageController pageController;
     private final User user;
 
-    public FriendCallable(PageController pageController, User user) {
-        this.pageController = pageController;
+    public FriendCallable(User user) {
         this.user = user;
     }
 

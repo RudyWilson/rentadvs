@@ -28,8 +28,6 @@ public class FriendsDAOMongoImplTest{
         frDAO.clear();
     }
 
-
-
     @Test
     public void testLoadAllUsers() throws Exception {
         List<User> lst = new ArrayList<>();

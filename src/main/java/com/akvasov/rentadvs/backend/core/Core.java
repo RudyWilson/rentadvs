@@ -8,6 +8,9 @@ import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import java.util.logging.Logger;
 /**
  * Created by akvasov on 17.07.14.
  */
+@Component
+@Scope(value = "singleton")
 public class Core {
 
     private static final Logger LOGGER = Logger.getLogger(Core.class.getName());
@@ -40,6 +45,8 @@ public class Core {
     private AdvDAO advDAO;
     @Autowired
     private PageController pageController;
+    @Autowired
+    private ApplicationContext ctx;
 
     private final Thread thread = new Thread(new Runnable() {
         @Override
@@ -93,10 +100,9 @@ public class Core {
     }
 
     private Worker createNewSession() {
-        Worker worker = new Worker();
-        worker.setPageController(pageController);
+        Worker worker = ctx.getBean(Worker.class);
+        //worker.setPageController(pageController);
         worker.addUsers(users);
-
         return worker;
     }
 
