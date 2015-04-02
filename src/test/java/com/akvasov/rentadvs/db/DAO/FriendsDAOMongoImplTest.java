@@ -2,32 +2,33 @@ package com.akvasov.rentadvs.db.DAO;
 
 import com.akvasov.rentadvs.db.DAO.MongoImpl.FriendsDAOMongoImpl;
 import com.akvasov.rentadvs.model.User;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import static org.testng.Assert.*;
-
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.*;
 
 /**
  * Created by alex on 12.08.14.
  */
 public class FriendsDAOMongoImplTest{
 
-    private FriendsDAOMongoImpl frDAO;
+    private static FriendsDAOMongoImpl frDAO;
 
-    public FriendsDAOMongoImplTest() throws UnknownHostException {
+    @BeforeClass
+    public static void init(){
         frDAO = new FriendsDAOMongoImpl();
     }
 
-    @BeforeMethod
+    @Before
     public void setUp(){
         frDAO.clear();
     }
+
+
 
     @Test
     public void testLoadAllUsers() throws Exception {
@@ -49,7 +50,7 @@ public class FriendsDAOMongoImplTest{
 
         Object[] ex = lst.toArray();
         Object[] ac = frDAO.loadAllUsers().toArray();
-        assertEquals(ex, ac);
+        assertArrayEquals(ex, ac);
     }
 
     @Test
@@ -75,7 +76,7 @@ public class FriendsDAOMongoImplTest{
 
         Object[] ex = {remove};
         Object[] ac = frDAO.loadAllUsers().toArray();
-        assertEquals(ex, ac);
+        assertArrayEquals(ex, ac);
     }
 
     @Test
@@ -96,6 +97,6 @@ public class FriendsDAOMongoImplTest{
 
         Object[] ex = lst.toArray();
         Object[] ac = frDAO.loadAllUsers().toArray();
-        assertEquals(ex, ac);
+        assertArrayEquals(ex, ac);
     }
 }

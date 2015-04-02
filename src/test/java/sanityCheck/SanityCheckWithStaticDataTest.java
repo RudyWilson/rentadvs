@@ -6,26 +6,14 @@ import com.akvasov.rentadvs.db.DAO.MongoImpl.AdvDAOMongoImpl;
 import com.akvasov.rentadvs.db.DAO.MongoImpl.FriendsDAOMongoImpl;
 import com.akvasov.rentadvs.model.Advertsment;
 import com.akvasov.rentadvs.model.User;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.*;
+import static org.junit.Assert.*;
 
-public class SanityCheckWithStaticData {
-
-    @BeforeMethod
-    public void setUp() throws Exception {
-
-    }
-
-    @AfterMethod
-    public void tearDown() throws Exception {
-
-    }
+public class SanityCheckWithStaticDataTest {
 
     @Test
     public void testMain() throws Exception {
