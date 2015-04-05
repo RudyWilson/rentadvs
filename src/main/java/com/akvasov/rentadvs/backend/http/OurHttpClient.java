@@ -39,7 +39,7 @@ public final class OurHttpClient {
                 .header("Cache-Control", "no-cache")
                 .header("Connection", "keep-alive")
                 .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-                .header("Cookie", "remixlang=0; remixflash=11.2.202; remixscreen_depth=24; remixdt=0; remixseenads=2; audio_vol=18; remixstid=1000526503_4ff161bd965ca6183e; remixrefkey=499d8a4c130e08393d; remixno_chrome_bar_ff=1; remixtst=53a08993; remixsid=02ea13700e2c09c3ae642da4c17db544a5bd367ec495fadc01d7e; remixhidemchg=1")
+                .header("Cookie", "remixlang=0; remixflash=11.2.202; remixscreen_depth=24; remixdt=0; remixseenads=2; audio_vol=18; remixstid=1000526503_4ff161bd965ca6183e; remixrefkey=499d8a4c130e08393d; remixno_chrome_bar_ff=1; remixtst=53a08993; remixsid=985c3efc33b2cbebd86fc6533f8fc772c75dd68396297b36f658a; remixhidemchg=1")
                 .header("Host", "vk.com")
                 .header("Pragma", "no-cache")
                 //.header("Referer", "http://vk.com/id47735")

@@ -12,7 +12,7 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="PageController" class="com.akvasov.rentadvs.backend.controller.PageControllerTestStaticImpl"></bean>
+    <bean id="PageController" class="com.akvasov.rentadvs.backend.controller.PageControllerHttpImpl"></bean>
 
     <bean id="FriendsDAO" class="com.akvasov.rentadvs.db.DAO.MongoImpl.FriendsDAOMongoImpl" scope="singleton"></bean>
 

@@ -1,4 +1,4 @@
-package com.akvasov.rentadvs.main;
+package integration;
 
 import com.akvasov.rentadvs.backend.controller.PageControllerHttpImpl;
 import com.akvasov.rentadvs.model.User;
